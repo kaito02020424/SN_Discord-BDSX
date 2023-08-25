@@ -1,14 +1,19 @@
 {
-    "token":"your token",
-    "send_channelID":"send channel id",
-    "discord_command":{
-        "bool":true,
-        "prefix":"."
+    "token": "your token",
+    "send_channelID": "message send channel id",
+    "discord_command": {
+        "bool": true,
+        "prefix": "."
     },
-    "OP_command":{
-        "bool":true,
-        "roleId":"OP role id"
+    "OP_command": {
+        "bool": true,
+        "roleId": "OP role id",
+        "use_channelID": "using OP command channel id"
     },
-    "lang":"ja",
-    "allowBackupLog":false
+    "lang": "ja",
+    "allowBackupLog": false,
+    "teamChatSettings": {
+        "tagName": "team chat tag",
+        "allowReverseMode": false
+    }
 }

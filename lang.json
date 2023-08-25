@@ -1,8 +1,9 @@
 {
-    "version":"3.1.0-dev",
+    "version":"3.1.0-dev_Tuned for SkyNetwork",
     "author":"kaito02020424",
     "ja":{
         "eval_err":".evalコマンドを使用する権限がない、もしくは機能が有効になっていません。",
+        "eval_invalidChannel":"evalの使用が許可されていません。",
         "arg_err":"引数エラー:実行するコマンドを指定してください。",
         "info":["作成者:","バージョン:"],
         "open":"サーバーが起動しました。",
@@ -20,6 +21,7 @@
     },
     "en":{
         "eval_err":"You do not have permission to use the .eval command or the function is not enabled.",
+        "eval_invalidChannel":"Use of eval is not allowed.",
         "arg_err":"Argument error: Specify command to execute.",
         "info":["Author:","Version:"],
         "open":"Server is up and running.",

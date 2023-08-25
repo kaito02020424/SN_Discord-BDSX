@@ -54,10 +54,22 @@ launcher_1.bedrockServer.afterOpen().then(() => {
 
     discord.discordEventsList.MessageCreate.on((payload) => {
         if (payload.author.bot) return
-        if (config.send_channelID !== payload.channel_id) return;
+        if (![config.send_channelID, config.OP_command.use_channelID].includes(payload.channel_id)) return;
         let message = payload.content
         //コマンドを実行する
         if (message.split(" ")[0] === `${config.discord_command.prefix}eval`) { /*.evalコマンド*/
+            if (payload.channel_id != config.OP_command.use_channelID) {
+                const embed = new discord.EmbedBuilder()
+                    .setAuthor({ "name": "Server" })
+                    .setColor(0xff0000)
+                    .setDescription(lang.eval_invalidChannel)
+                let sendPayload = { embeds: [embed] }
+                let cancel = { cancel: false }
+                api.runDiscordCommand.emit("eval", sendPayload, cancel)
+                if (cancel.cancel) return;
+                client.getChannel(payload.channel_id).sendMessage(sendPayload)
+                return;
+            }
             if (!payload.member.roles.includes(config.OP_command.roleId) || !config.OP_command.bool) {
                 const embed = new discord.EmbedBuilder()
                     .setAuthor({ "name": "Server" })
@@ -246,6 +258,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
         if (api.dbchatFormatter.username(ev.name) in blacklist) {
             return;
         }
+        if ((ev.message.startsWith("!") && (!launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag(config.teamChatSettings.tagName) ^ config.teamChatSettings.allowReverseMode)) || (!ev.message.startsWith("!") && (launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag(config.teamChatSettings.tagName) ^ config.teamChatSettings.allowReverseMode))) sendChannelId = config.OP_command.use_channelID
         if (ev.message.length > 4000) {
             let payload = {
                 embeds: [

@@ -1,5 +1,5 @@
 {
-  "name": "bdsx2discord",
+  "name": "sn-discord-bdsx",
   "version": "0.0.1",
   "description": "bdsx <-> discord chat Plugin",
   "main": "index.js",
