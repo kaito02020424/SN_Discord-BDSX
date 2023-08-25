@@ -112,7 +112,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
             if (launcher_1.bedrockServer.isClosed()) return;
             let m = [];
             for (const player of server_1.serverInstance.getPlayers()) {
-                m.push(api.dbchatFormatter.username(player.getNameTag()));
+                m.push(api.dbchatFormatter.username(player.getName()));
             }
             let c = "";
             for (const player of m) {
@@ -297,7 +297,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
     event_1.events.playerJoin.on((ev) => {
         if (!status) return;
         const player = ev.player;
-        const username = api.dbchatFormatter.username(player.getNameTag());
+        const username = api.dbchatFormatter.username(player.getName());
         //変なログインを検知する。
         if (!(username === undefined || username === "undefined")) {
             let payload = {
@@ -321,7 +321,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
     //LEFTイベント
     event_1.events.playerLeft.on((ev) => {
         if (!status) return;
-        const id = api.dbchatFormatter.username(ev.player.getNameTag());
+        const id = api.dbchatFormatter.username(ev.player.getName());
         let payload = {
             embeds: [
                 {
@@ -400,11 +400,11 @@ launcher_1.bedrockServer.afterOpen().then(() => {
         (param, origin, output) => {
             if (param.mode === "blacklist") {
                 for (const player of server_1.serverInstance.getPlayers()) {
-                    if (api.dbchatFormatter.username(player.getNameTag()) === param.username.getName()) {
-                        if (api.dbchatFormatter.username(player.getNameTag()) in blacklist) {
+                    if (api.dbchatFormatter.username(player.getName()) === param.username.getName()) {
+                        if (api.dbchatFormatter.username(player.getName()) in blacklist) {
                             output.error("It has already been registered.");
                         } else {
-                            blacklist[api.dbchatFormatter.username(player.getNameTag())] = true;
+                            blacklist[api.dbchatFormatter.username(player.getName())] = true;
                             fs.writeFileSync(`${filepath}/database/blacklist.json`, JSON.stringify(blacklist, null, 4));
                             output.success("success!");
                         }
