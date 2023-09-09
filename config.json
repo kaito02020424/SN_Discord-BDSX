@@ -15,5 +15,6 @@
     "teamChatSettings": {
         "tagName": "team chat tag",
         "allowReverseMode": false
-    }
+    },
+    "tnacPrefix": "-"
 }

@@ -258,6 +258,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
         if (api.dbchatFormatter.username(ev.name) in blacklist) {
             return;
         }
+        if (ev.message.startsWith(config.tnacPrefix)) return;
         if ((ev.message.startsWith("!") && (!launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag(config.teamChatSettings.tagName) ^ config.teamChatSettings.allowReverseMode)) || (!ev.message.startsWith("!") && (launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag(config.teamChatSettings.tagName) ^ config.teamChatSettings.allowReverseMode))) sendChannelId = config.OP_command.use_channelID
         if (ev.message.length > 4000) {
             let payload = {
