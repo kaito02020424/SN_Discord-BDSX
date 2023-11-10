@@ -40,6 +40,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
     const command_1 = require("bdsx/bds/command");
     const command_2 = require("bdsx/command");
     const common_1 = require("bdsx/common");
+    const nativeType = require("bdsx/nativetype")
     const cr = require("bdsx/commandresult");
 
     //ファイル群読み込み
@@ -462,6 +463,41 @@ launcher_1.bedrockServer.afterOpen().then(() => {
         mode: command_2.command.enum("blacklist", { blacklist: "blacklist" }),
         motion: command_2.command.enum("list", { list: "list" })
     });
+    dbchat.overload(
+        (param, origin, output) => {
+            if (param.mode === "sendchat") {
+                const message = param.message.length > 4000 ? param.message.substr(0, 4000) : param.message
+                const sendChannelId = param.sendChannel == "main" ? config.send_channelID : config.OP_command.use_channelID
+                const color = param.R * (256 ** 2) + param.G * (256 ** 1) + param.B * (256 ** 0)
+                if (color > 0xffffff || color < 0) return output.error("カラーコードの値の範囲を超えています。")
+                let payload = {
+                    embeds: [
+                        {
+                            author: {
+                                name: param.embedName
+                            },
+                            description: message,
+                            color: color,
+                        }
+                    ]
+                }
+                if (param.addTimeStamp) {
+                    payload.embeds[0].timestamp = new Date().toISOString()
+                }
+                client.getChannel(sendChannelId).sendMessage(payload)
+                return output.success("正常に送信されました。");
+            }
+        }, {
+        mode: command_2.command.enum("sendchat", { sendchat: "sendchat" }),
+        sendChannel: command_2.command.enum("channels", "main", "sub"),
+        R: nativeType.int32_t,
+        G: nativeType.int32_t,
+        B: nativeType.int32_t,
+        embedName: nativeType.CxxString,
+        message: nativeType.CxxString,
+        addTimeStamp: nativeType.bool_t
+    }
+    )
 });
 
 //wsに接続
