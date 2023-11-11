@@ -56,6 +56,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
     discord.discordEventsList.MessageCreate.on((payload) => {
         if (payload.author.bot) return
         if (![config.send_channelID, config.OP_command.use_channelID].includes(payload.channel_id)) return;
+        if (payload.channel_id === config.OP_command.use_channelID && payload.content.startsWith(".")) return;
         let message = payload.content
         //コマンドを実行する
         if (message.split(" ")[0] === `${config.discord_command.prefix}eval`) { /*.evalコマンド*/
@@ -260,10 +261,6 @@ launcher_1.bedrockServer.afterOpen().then(() => {
             return;
         }
         if (ev.message.startsWith(config.tnacPrefix)) return;
-        if ((ev.message.startsWith("!") && (!launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag(config.teamChatSettings.tagName) ^ config.teamChatSettings.allowReverseMode)) || (!ev.message.startsWith("!") && (launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag(config.teamChatSettings.tagName) ^ config.teamChatSettings.allowReverseMode))) {
-            if (ev.message.startsWith(".")) return;
-            sendChannelId = config.OP_command.use_channelID
-        }
         if (ev.message.length > 4000) {
             let payload = {
                 embeds: [
