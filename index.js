@@ -56,7 +56,6 @@ launcher_1.bedrockServer.afterOpen().then(() => {
     discord.discordEventsList.MessageCreate.on((payload) => {
         if (payload.author.bot) return
         if (![config.send_channelID, config.OP_command.use_channelID].includes(payload.channel_id)) return;
-        if (payload.channel_id === config.OP_command.use_channelID && payload.content.startsWith(".")) return;
         let message = payload.content
         //コマンドを実行する
         if (message.split(" ")[0] === `${config.discord_command.prefix}eval`) { /*.evalコマンド*/
@@ -227,6 +226,8 @@ launcher_1.bedrockServer.afterOpen().then(() => {
             client.getChannel(payload.channel_id).sendMessage(sendPayload);
             return;
         } else {
+            //OPコンソールで.から始まる通常チャットを遮断
+            if (payload.channel_id === config.OP_command.use_channelID && payload.content.startsWith(".")) return;
             let cancel = { cancel: false }
             api.postMessageToMinecraft.emit(payload, cancel)
             message = payload.content
@@ -460,31 +461,30 @@ launcher_1.bedrockServer.afterOpen().then(() => {
         mode: command_2.command.enum("blacklist", { blacklist: "blacklist" }),
         motion: command_2.command.enum("list", { list: "list" })
     });
-    dbchat.overload(
-        (param, origin, output) => {
-            if (param.mode === "sendchat") {
-                const message = param.message.length > 4000 ? param.message.substr(0, 4000) : param.message
-                const sendChannelId = param.sendChannel == "main" ? config.send_channelID : config.OP_command.use_channelID
-                const color = param.R * (256 ** 2) + param.G * (256 ** 1) + param.B * (256 ** 0)
-                if (color > 0xffffff || color < 0) return output.error("カラーコードの値の範囲を超えています。")
-                let payload = {
-                    embeds: [
-                        {
-                            author: {
-                                name: param.embedName
-                            },
-                            description: message,
-                            color: color,
-                        }
-                    ]
-                }
-                if (param.addTimeStamp) {
-                    payload.embeds[0].timestamp = new Date().toISOString()
-                }
-                client.getChannel(sendChannelId).sendMessage(payload)
-                return output.success("正常に送信されました。");
+    dbchat.overload((param, origin, output) => {
+        if (param.mode === "sendchat") {
+            const message = param.message.length > 4000 ? param.message.substr(0, 4000) : param.message
+            const sendChannelId = param.sendChannel == "main" ? config.send_channelID : config.OP_command.use_channelID
+            const color = param.R * (256 ** 2) + param.G * (256 ** 1) + param.B * (256 ** 0)
+            if (color > 0xffffff || color < 0) return output.error("カラーコードの値の範囲を超えています。")
+            let payload = {
+                embeds: [
+                    {
+                        author: {
+                            name: param.embedName
+                        },
+                        description: message,
+                        color: color,
+                    }
+                ]
             }
-        }, {
+            if (param.addTimeStamp) {
+                payload.embeds[0].timestamp = new Date().toISOString()
+            }
+            client.getChannel(sendChannelId).sendMessage(payload)
+            return output.success("正常に送信されました。");
+        }
+    }, {
         mode: command_2.command.enum("sendchat", { sendchat: "sendchat" }),
         sendChannel: command_2.command.enum("channels", "main", "sub"),
         R: nativeType.int32_t,
