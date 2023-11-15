@@ -226,8 +226,8 @@ launcher_1.bedrockServer.afterOpen().then(() => {
             client.getChannel(payload.channel_id).sendMessage(sendPayload);
             return;
         } else {
-            //OPコンソールで.から始まる通常チャットを遮断
-            if (payload.channel_id === config.OP_command.use_channelID && payload.content.startsWith(".")) return;
+            //チャットコンソールで.から始まる通常チャットを遮断
+            if (payload.content.startsWith(".")) return;
             let cancel = { cancel: false }
             api.postMessageToMinecraft.emit(payload, cancel)
             message = payload.content
@@ -262,6 +262,10 @@ launcher_1.bedrockServer.afterOpen().then(() => {
             return;
         }
         if (ev.message.startsWith(config.tnacPrefix)) return;
+        if ((ev.message.startsWith("!") && (!launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag(config.teamChatSettings.tagName) ^ config.teamChatSettings.allowReverseMode)) || (!ev.message.startsWith("!") && (launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag(config.teamChatSettings.tagName) ^ config.teamChatSettings.allowReverseMode))) {
+            if (launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag("red") || launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag("blue") || launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag("yellow") || launcher_1.bedrockServer.level.getPlayerByXuid(ev.xboxUserId).hasTag("lime"))
+                sendChannelId = config.OP_command.use_channelID
+        }
         if (ev.message.length > 4000) {
             let payload = {
                 embeds: [
