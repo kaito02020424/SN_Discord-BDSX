@@ -236,6 +236,13 @@ launcher_1.bedrockServer.afterOpen().then(() => {
             launcher_1.bedrockServer.executeCommand(`tellraw @a {"rawtext":[{"text":"[Discord][${payload.author.username.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}§r] ${message.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}§r"}]}`, cr.CommandResultType.Mute);
         }
     });
+    let lastTime = 0
+    event_1.events.levelTick.on(() => {
+        if (Date.now() - lastTime > 15 * 1000) {
+            client.getChannel(config.topicChannelId).changeTopic(`${lang.status[0]}${launcher_1.bedrockServer.serverInstance.getPlayers().length}/${launcher_1.bedrockServer.serverInstance.getMaxPlayers()}\n${lang.status[1]}${launcher_1.bedrockServer.serverInstance.getMotd()}\n${lang.status[2]}${launcher_1.bedrockServer.serverInstance.getGameVersion().fullVersionString}\n`)
+            lastTime = Date.now()
+        }
+    })
 
     //reload function
     function reload() {
@@ -343,6 +350,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
         api.playerLeft.emit(ev.player, payload, cancel)
         if (cancel.cancel) return
         client.getChannel(config.send_channelID).sendMessage(payload)
+        
     });
     //server leaveイベント
     event_1.events.serverLeave.on(() => {

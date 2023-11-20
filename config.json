@@ -16,5 +16,6 @@
         "tagName": "team chat tag",
         "allowReverseMode": false
     },
-    "tnacPrefix": "-"
+    "tnacPrefix": "-",
+    "topicChannelId": "changed topic channel id"
 }

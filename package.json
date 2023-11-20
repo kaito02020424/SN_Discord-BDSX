@@ -7,7 +7,7 @@
   "author": "kaito02020424",
   "bdsxPlugin": true,
   "dependencies": {
-    "bdsx-discord-module": "^1.4.0",
+    "bdsx-discord-module": "^1.5.0",
     "comment-json": "~1.1.3"
   }
 }
