@@ -239,7 +239,7 @@ launcher_1.bedrockServer.afterOpen().then(() => {
     let lastTime = 0
     event_1.events.levelTick.on(() => {
         if (Date.now() - lastTime > 15 * 1000) {
-            client.getChannel(config.topicChannelId).changeTopic(`${lang.status[0]}${launcher_1.bedrockServer.serverInstance.getPlayers().length}/${launcher_1.bedrockServer.serverInstance.getMaxPlayers()}\n${lang.status[1]}${launcher_1.bedrockServer.serverInstance.getMotd().replace(/§/g,"")}\n${lang.status[2]}${launcher_1.bedrockServer.serverInstance.getGameVersion().fullVersionString}\n`)
+            client.getChannel(config.topicChannelId).changeTopic(`${lang.status[0]}${launcher_1.bedrockServer.serverInstance.getPlayers().length}/${launcher_1.bedrockServer.serverInstance.getMaxPlayers()}\n${lang.status[1]}${launcher_1.bedrockServer.serverInstance.getMotd().replace(/§./g,"")}\n${lang.status[2]}${launcher_1.bedrockServer.serverInstance.getGameVersion().fullVersionString}\n`)
             lastTime = Date.now()
         }
     })
